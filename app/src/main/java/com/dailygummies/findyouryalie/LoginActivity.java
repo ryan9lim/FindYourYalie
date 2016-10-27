@@ -54,6 +54,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             "foo@example.com:hello", "bar@example.com:world"
     };
     /**
+     * Used to update User Session Information
+     */
+    private UserSession mUserSession;
+    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -68,6 +72,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mUserSession =  new UserSession(getApplicationContext());
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -314,6 +320,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
+                    mUserSession.createUserLoginSession(mEmail, mPassword);
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
@@ -328,6 +335,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                onLoginSuccess();
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -340,6 +348,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    private void onLoginSuccess(){
+        // TODO: 10/27/2016 open new activity, http://www.androidhive.info/2012/08/android-session-management-using-shared-preferences/
+        // TODO: 10/27/2016 http://stackoverflow.com/questions/4371273/should-accessing-sharedpreferences-be-done-off-the-ui-thread
     }
 }
 
