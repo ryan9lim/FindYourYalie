@@ -30,9 +30,6 @@ public class UserSession {
     // All Shared Preferences Keys
     public static final String IS_USER_LOGIN = "IsUserLoggedIn";
 
-    // User name (make variable public to access from outside)
-    public static final String KEY_NAME = "username";
-
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
@@ -54,8 +51,8 @@ public class UserSession {
         // Storing email in preferences
         editor.putString(KEY_EMAIL,  email);
 
-        // Storing password in preferences
-        editor.putString(KEY_NAME, password);
+        // Storing email in preferences
+        editor.putString(KEY_PASSWORD,  email);
 
         // commit changes
         editor.commit();
@@ -95,9 +92,6 @@ public class UserSession {
 
         //Use hashmap to store user credentials
         HashMap<String, String> user = new HashMap<String, String>();
-
-        // user name
-        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
 
         // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));

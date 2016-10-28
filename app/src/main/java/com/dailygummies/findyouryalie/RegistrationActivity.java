@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,7 +12,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,7 +56,7 @@ public class RegistrationActivity extends AppCompatActivity implements LoaderMan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_registration);
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -79,7 +77,7 @@ public class RegistrationActivity extends AppCompatActivity implements LoaderMan
             }
         });
 
-        Button mEmailRegistrationButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailRegistrationButton = (Button) findViewById(R.id.email_registration_button);
         mEmailRegistrationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
