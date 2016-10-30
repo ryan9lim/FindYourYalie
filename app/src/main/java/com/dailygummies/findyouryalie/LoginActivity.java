@@ -350,6 +350,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void onLoginSuccess(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
         // TODO: 10/27/2016 open new activity, http://www.androidhive.info/2012/08/android-session-management-using-shared-preferences/
         // TODO: 10/27/2016 http://stackoverflow.com/questions/4371273/should-accessing-sharedpreferences-be-done-off-the-ui-thread
     }
