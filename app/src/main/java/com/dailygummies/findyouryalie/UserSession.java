@@ -13,16 +13,16 @@ import android.content.SharedPreferences.Editor;
  */
 public class UserSession {
     // Shared Preferences reference
-    SharedPreferences pref;
+    private SharedPreferences pref;
 
     // Editor reference for Shared preferences
-    Editor editor;
+    private Editor editor;
 
     // Context
-    Context _context;
+    private Context mContext;
 
     // Shared preferences mode
-    int PRIVATE_MODE = 0;
+    private static final int PRIVATE_MODE = 0;
 
     // Shared preferences file name
     public static final String PREFER_NAME = "FindYourYaliePref";
@@ -30,29 +30,29 @@ public class UserSession {
     // All Shared Preferences Keys
     public static final String IS_USER_LOGIN = "IsUserLoggedIn";
 
+    // Name
+    public static final String KEY_NAME = "name";
+
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
-    // password
-    public static final String KEY_PASSWORD = "txtPassword";
-
     // Constructor
     public UserSession(Context context){
-        this._context = context;
-        pref = _context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
+        this.mContext = context;
+        pref = mContext.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
 
     //Create login session
-    public void createUserLoginSession(String email, String password){
+    public void createUserLoginSession(String email, String name){
         // Storing login value as TRUE
         editor.putBoolean(IS_USER_LOGIN, true);
 
         // Storing email in preferences
-        editor.putString(KEY_EMAIL,  email);
+        editor.putString(KEY_EMAIL, email);
 
         // Storing email in preferences
-        editor.putString(KEY_PASSWORD,  email);
+        editor.putString(KEY_NAME, name);
 
         // commit changes
         editor.commit();
@@ -68,7 +68,7 @@ public class UserSession {
         if(!this.isUserLoggedIn()){
 
             // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(_context, LoginActivity.class);
+            Intent i = new Intent(mContext, LoginActivity.class);
 
             // Closing all the Activities from stack
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -77,7 +77,7 @@ public class UserSession {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             // Staring Login Activity
-            _context.startActivity(i);
+            mContext.startActivity(i);
 
             return true;
         }
@@ -96,8 +96,8 @@ public class UserSession {
         // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
 
-        // user email id
-        user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
+        // user name
+        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
 
         // return user
         return user;
@@ -113,7 +113,7 @@ public class UserSession {
         editor.commit();
 
         // After logout redirect user to MainActivity
-        Intent i = new Intent(_context, MainActivity.class);
+        Intent i = new Intent(mContext, MainActivity.class);
 
         // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -122,7 +122,7 @@ public class UserSession {
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         // Staring Login Activity
-        _context.startActivity(i);
+        mContext.startActivity(i);
     }
 
 

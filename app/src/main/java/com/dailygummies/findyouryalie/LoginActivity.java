@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -38,6 +39,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String TAG = "LoginActivity";
     //https://developers.google.com/android/reference/com/google/android/gms/auth/api/signin/GoogleSignInApi#silentSignIn(com.google.android.gms.common.api.GoogleApiClient)
     // silent log in
+    //https://github.com/googlesamples/google-services/blob/master/android/signin/app/src/main/java/com/google/samples/quickstart/signin/SignInActivity.java#L51-L55
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -86,15 +90,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
+
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -102,6 +107,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        OptionalPendingResult<GoogleSignInResult> pendingResult =
+                Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (pendingResult.isDone()) {
+            // There's immediate result available.
+            handleSignInResult(pendingResult.get());
+        } else {
+            // There's no immediate result ready, displays some progress indicator and waits for the
+            // async callback.
+            setProgressBarIndeterminateVisibility(true);
+            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
+                    handleSignInResult(result);
+                    setProgressBarIndeterminateVisibility(false);
+                }
+            });
+        }
+
+        // Google Sign-in Button
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setScopes(gso.getScopeArray());
@@ -112,7 +136,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-
+        /**
+         * Conventional Login
+         */
         // Set up User Session
         mUserSession =  new UserSession(getApplicationContext());
         // Set up the login form.
@@ -152,11 +178,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
+    /**
+     *  Sign in
+     */
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    /**
+     *  Get result from Sign in
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -173,9 +205,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            // TODO: 10/30/2016 signed in 
-//            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-//            updateUI(true);
+            Log.d(TAG,getString(R.string.signed_in_fmt, acct.getDisplayName()));
+            onLoginSuccess();
         } else {
             // Signed out, show unauthenticated UI.
             // TODO: 10/30/2016 signed out 
@@ -189,6 +220,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
+    /**
+     * Conventional Login
+     */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -428,8 +462,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void onLoginSuccess(){
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, LoginActivity.class);
+//        startActivity(intent);
         // TODO: 10/27/2016 open new activity, http://www.androidhive.info/2012/08/android-session-management-using-shared-preferences/
         // TODO: 10/27/2016 http://stackoverflow.com/questions/4371273/should-accessing-sharedpreferences-be-done-off-the-ui-thread
     }

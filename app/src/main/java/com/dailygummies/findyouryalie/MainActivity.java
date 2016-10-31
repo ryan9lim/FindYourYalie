@@ -3,12 +3,12 @@ package com.dailygummies.findyouryalie;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
-
 
     // Constants
     // The authority for the sync adapter's content provider
@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String ACCOUNT_TYPE = "example.com";
     // The account name
     public static final String ACCOUNT = "dummyaccount";
+
+    // User Session
+    private UserSession mUserSession;
     // Instance fields
     Account mAccount;
 
@@ -31,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mUserSession = new UserSession(this);
+        checkUserLoggedIn();
+
 //        mAccount = CreateSyncAccount(this);
 
         // Set up User Session
@@ -47,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
 //        mUserSession =  new UserSession(getApplicationContext());
 //        mUserSession.checkLogin();
 
+    }
+
+    /**
+     *  Sign in
+     */
+    private void checkUserLoggedIn() {
+        if(!mUserSession.isUserLoggedIn()){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 //
 //    /**
