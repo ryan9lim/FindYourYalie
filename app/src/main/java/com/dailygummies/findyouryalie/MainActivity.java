@@ -23,11 +23,6 @@ public class MainActivity extends AppCompatActivity {
     // Instance fields
     Account mAccount;
 
-
-    //    /**
-//     * Used to update User Session Information
-//     */
-//    private UserSession mUserSession;
 //    https://developer.android.com/training/sync-adapters/running-sync-adapter.html
 //    https://developers.google.com/identity/sign-in/android/sign-in
     @Override
@@ -35,8 +30,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Check User Session
         mUserSession = new UserSession(this);
-        checkUserLoggedIn();
+        mUserSession.checkLogin();
 
 //        mAccount = CreateSyncAccount(this);
 
@@ -54,17 +50,6 @@ public class MainActivity extends AppCompatActivity {
 //        mUserSession =  new UserSession(getApplicationContext());
 //        mUserSession.checkLogin();
 
-    }
-
-    /**
-     *  Sign in
-     */
-    private void checkUserLoggedIn() {
-        if(!mUserSession.isUserLoggedIn()){
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
     }
 //
 //    /**

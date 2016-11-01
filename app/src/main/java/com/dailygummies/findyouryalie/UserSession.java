@@ -36,6 +36,9 @@ public class UserSession {
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
+    // ID Token
+    public static final String KEY_TOKEN = "token";
+
     // Constructor
     public UserSession(Context context){
         this.mContext = context;
@@ -44,17 +47,16 @@ public class UserSession {
     }
 
     //Create login session
-    public void createUserLoginSession(String email, String name){
+    public void createUserLoginSession(String email, String name, String token){
         // Storing login value as TRUE
         editor.putBoolean(IS_USER_LOGIN, true);
 
-        // Storing email in preferences
-        editor.putString(KEY_EMAIL, email);
-
-        // Storing email in preferences
+        // Storing user information in preferences
         editor.putString(KEY_NAME, name);
+        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_TOKEN, token);
 
-        // commit changes
+        // Commit changes
         editor.commit();
     }
 

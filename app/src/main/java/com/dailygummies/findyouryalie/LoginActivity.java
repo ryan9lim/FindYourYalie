@@ -94,6 +94,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mUserSession = new UserSession(this);
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -107,6 +109,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        // Silent Sign In,
         OptionalPendingResult<GoogleSignInResult> pendingResult =
                 Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (pendingResult.isDone()) {
@@ -139,9 +142,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         /**
          * Conventional Login
          */
-        // Set up User Session
-        mUserSession =  new UserSession(getApplicationContext());
-        // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
@@ -206,12 +206,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             Log.d(TAG,getString(R.string.signed_in_fmt, acct.getDisplayName()));
+            mUserSession.createUserLoginSession(acct.getEmail(),acct.getDisplayName(),acct.getIdToken());
             onLoginSuccess();
         } else {
             // Signed out, show unauthenticated UI.
             // TODO: 10/30/2016 signed out 
         }
     }
+
+    private void
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -410,11 +413,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
-        private final String mPassword;
+        private final String mName;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String name) {
             mEmail = email;
-            mPassword = password;
+            mName = name;
         }
 
         @Override
@@ -427,15 +430,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } catch (InterruptedException e) {
                 return false;
             }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    mUserSession.createUserLoginSession(mEmail, mPassword);
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+            // TODO: 11/1/2016 check Login credentials, return true if correct
 
             return true;
         }
@@ -446,6 +441,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                // TODO: 11/1/2016 
+//                mUserSession.createUserLoginSession(mEmail, mName, mToken);
                 onLoginSuccess();
                 finish();
             } else {
