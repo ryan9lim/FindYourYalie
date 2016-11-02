@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "278990226712",
+    "project_id": "findyouryalie"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278990226712:android:37b7b11468b13584",
+        "android_client_info": {
+          "package_name": "com.dailygummies.findyouryalie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278990226712-7k362366jhacsv5crbqu4l6e4j5p2ke3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dailygummies.findyouryalie",
+            "certificate_hash": "6551252AA5F61A0448142BE105ADB9E4C6023073"
+          }
+        },
+        {
+          "client_id": "278990226712-i1oqqc5p6sbosnjo6ggpbmd6hsdn0ull.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeTGR5g0vENz88Ja7xV4C99eJV09Ztatw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
