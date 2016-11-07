@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         // Google Sign-in Button
-        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        SignInButton signInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setScopes(gso.getScopeArray());
         signInButton.setOnClickListener(new OnClickListener() {
@@ -213,8 +213,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: 10/30/2016 signed out 
         }
     }
-
-    private void
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
